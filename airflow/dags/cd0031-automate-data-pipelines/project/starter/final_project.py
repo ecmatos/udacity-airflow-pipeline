@@ -15,7 +15,7 @@ default_args = {
     'depends_on_past': False,
     'start_date': pendulum.now(),
     'retries': 3,
-    'retry_delay': pendulum.duration(seconds=30)    
+    'retry_delay': pendulum.duration(seconds=300)
 }
 
 @dag(
