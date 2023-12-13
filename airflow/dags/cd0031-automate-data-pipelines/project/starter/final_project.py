@@ -31,12 +31,14 @@ def final_project():
     end_operator = DummyOperator(task_id='End_execution')
 
     stage_events_to_redshift = StageToRedshiftOperator(
-        task_id='stage_events',
+        task_id='Stage_events',
         table = "staging_events",
         redshift_conn_id = "redshift",
         aws_credentials_id = "aws_credentials",
-        s3_bucket = "esron-lab",
-        s3_key = "log-data/2018/11"
+        s3_bucket = "udacity-dend",
+        s3_key = "log-data/2018/11",
+        copy_json_option = "s3://udacity-dend/log_json_path.json",
+        region = 'us-west-2'
     )
 
     stage_songs_to_redshift = StageToRedshiftOperator(
@@ -45,7 +47,9 @@ def final_project():
         redshift_conn_id = "redshift",
         aws_credentials_id = "aws_credentials",
         s3_bucket = "esron-lab",
-        s3_key = "song-data"
+        s3_key = "song-data",
+        copy_json_option = 'auto',
+        region = 'us-east-1'
     )
 
     load_songplays_table = LoadFactOperator(

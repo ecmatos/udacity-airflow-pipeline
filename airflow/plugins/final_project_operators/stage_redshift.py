@@ -12,7 +12,8 @@ class StageToRedshiftOperator(BaseOperator):
         FROM '{}'
         ACCESS_KEY_ID '{}'
         SECRET_ACCESS_KEY '{}'
-        JSON 'auto'
+        REGION '{}'
+        JSON '{}'
     """
 
     @apply_defaults
@@ -22,6 +23,8 @@ class StageToRedshiftOperator(BaseOperator):
                  table = "",
                  s3_bucket = "",
                  s3_key = "",
+                 region = "",
+                 copy_json_option = '',
                  *args, **kwargs):
 
         super(StageToRedshiftOperator, self).__init__(*args, **kwargs)
@@ -30,6 +33,8 @@ class StageToRedshiftOperator(BaseOperator):
         self.s3_bucket = s3_bucket
         self.s3_key = s3_key
         self.aws_credentials_id = aws_credentials_id
+        self.region = region,
+        self.copy_json_option = copy_json_option
 
     def execute(self, context):
         metastoreBackend = MetastoreBackend()
@@ -47,7 +52,9 @@ class StageToRedshiftOperator(BaseOperator):
             self.table,
             s3_path,
             aws_conn.login,
-            aws_conn.password
+            aws_conn.password,
+            self.region[0],
+            self.copy_json_option            
         )
         
         redshift.run(formatted_sql)
